@@ -1,0 +1,11 @@
+Fazer a camada de Service e Repository de Usuario;
+
+
+
+
+Revisar propriedades das entidades;
+Revisar propriedades dos dtos;
+Fazer a camada de repository de Extensao e de TipoInteracao;
+Adaptar a conversão dto para uma função recursiva em helper;
+
+
