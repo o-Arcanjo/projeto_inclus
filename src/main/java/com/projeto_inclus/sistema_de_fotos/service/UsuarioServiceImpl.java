@@ -5,6 +5,7 @@ import com.projeto_inclus.sistema_de_fotos.domain.IdentificadorFactory;
 import com.projeto_inclus.sistema_de_fotos.entity.Usuario;
 import com.projeto_inclus.sistema_de_fotos.mapper.UsuarioMapper;
 import com.projeto_inclus.sistema_de_fotos.repository.IUsuarioRepository;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateLogin;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestDTO;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.UsuarioResponseDTOCreate;
 import com.projeto_inclus.sistema_de_fotos.util.EstruturaTokenFactory;
@@ -47,7 +48,7 @@ public class UsuarioServiceImpl implements IUsuarioService{
     }
 
     @Override
-    public String login(UsuarioRequestDTO request){
+    public String login(UsuarioRequestCreateLogin request){
         Usuario usuario = usuarioRepository.findUsuarioByEmail(request.email())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         authService.verificarSenha(request.senha(), usuario.getSenha());

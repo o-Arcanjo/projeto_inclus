@@ -1,4 +1,5 @@
 package com.projeto_inclus.sistema_de_fotos.rest.controller;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateLogin;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestDTO;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.UsuarioResponseDTOCreate;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.error.ErrorResponse500DTO;
@@ -68,8 +69,7 @@ public interface IUsuarioControllerApi {
     )
     @PostMapping("/login")
     ResponseEntity<String> fazerLogin(
-            @RequestBody @Valid UsuarioRequestDTO usuarioRequest
+            @RequestBody @Valid UsuarioRequestCreateLogin usuarioRequest
     );
 
-    // falta documentar melhor isso e fazer o helper para aqui
 }

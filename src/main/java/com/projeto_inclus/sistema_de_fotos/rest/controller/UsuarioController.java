@@ -1,5 +1,6 @@
 package com.projeto_inclus.sistema_de_fotos.rest.controller;
 
+import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateLogin;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestDTO;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.UsuarioResponseDTOCreate;
 import com.projeto_inclus.sistema_de_fotos.service.IUsuarioService;
@@ -28,7 +29,7 @@ public class UsuarioController implements IUsuarioControllerApi{
 
     @Override
     public ResponseEntity<String> fazerLogin(
-            @RequestBody @Valid UsuarioRequestDTO usuarioRequest
+            @RequestBody @Valid UsuarioRequestCreateLogin usuarioRequest
     ) {
         String response = usuarioService.login((usuarioRequest));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
