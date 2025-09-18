@@ -14,4 +14,9 @@ public class ErroValidacao extends CustomBaseException {
 
     @Override
     public ErrorTypeEnum getErrorType() { return ErrorTypeEnum.ERRO_DE_VALIDACAO; }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }

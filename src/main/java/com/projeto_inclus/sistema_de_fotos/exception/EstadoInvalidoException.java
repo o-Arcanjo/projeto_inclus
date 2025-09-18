@@ -21,4 +21,9 @@ public class EstadoInvalidoException extends CustomBaseException {
     public ErrorTypeEnum getErrorType() {
         return ErrorTypeEnum.ESTADO_INVALIDO;
     }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }

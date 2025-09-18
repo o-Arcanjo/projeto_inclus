@@ -22,4 +22,9 @@ public class RecursoNaoEncontrado extends CustomBaseException {
     public ErrorTypeEnum getErrorType() {
         return ErrorTypeEnum.RECURSO_NAO_ENCONTRADO;
     }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }

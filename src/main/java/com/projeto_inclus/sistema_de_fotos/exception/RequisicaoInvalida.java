@@ -14,4 +14,9 @@ public class RequisicaoInvalida extends CustomBaseException {
 
     @Override
     public ErrorTypeEnum getErrorType() { return ErrorTypeEnum.REQUISICAO_INVALIDA; }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }

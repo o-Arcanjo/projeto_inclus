@@ -14,4 +14,9 @@ public class NaoAutenticado extends CustomBaseException {
 
     @Override
     public ErrorTypeEnum getErrorType() { return ErrorTypeEnum.NAO_AUTENTICADO; }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -107,34 +108,63 @@ public class GlobalExceptionHandler {
         errorStatusMap.put(exceptionClass, ErrorMapingFactory.instanciarErrorMaping(errorTypeEnum, httpStatus));
     }
 
-    private static ErrorMaping getErrorMapping(Exception ex) {
+    private static CustomBaseException getErrorMapping(Exception ex) {
         return errorStatusMap.getOrDefault(ex.getClass(),
                 ErrorMapingFactory.instanciarErrorMaping(ErrorTypeEnum.ERRO_INESPERADO, HttpStatus.INTERNAL_SERVER_ERROR));
     }
-    private String stackTraceToString(Exception ex) {
+
+    private String stackTraceToString(CustomBaseException ex) {
         StringWriter errors = new StringWriter();
         ex.printStackTrace(new PrintWriter(errors));
         return errors.toString();
     }
 
-    private ProblemDetail buildProblemDetail(Exception ex) {
-        ICustomBaseException errorMaping = getErrorMapping(ex);
+    private ProblemDetail buildProblemDetail(CustomBaseException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-                errorMaping.getHttpStatus(), ex.getLocalizedMessage());
-        problemDetail.setType(URI.create(errorMaping.getErrorType().getUri()));
+                ex.getHttpStatus(), ex.getLocalizedMessage());
+        problemDetail.setType(URI.create(ex.getErrorType().getUri()));
         problemDetail.setProperty("trace", stackTraceToString(ex));
         problemDetail.setProperty("timestamp", LocalDateTime.now());
         return problemDetail;
     }
 
-    @ExceptionHandler(Exception.class)
-    public ProblemDetail handleException(Exception ex){
-        return buildProblemDetail(ex);
+    private ProblemDetail buildProblemDetailConjunct(BindingResult bindingResult){
+        var fieldErrors = bindingResult.getFieldErrors();
+        if (fieldErrors.size() > 1) {
+            Map<String, String> errors = new HashMap<>();
+            fieldErrors.forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+
+            ProblemDetail problemDetail = buildProblemDetail(
+                    new ErroValidacao("Vários erros de validação")
+            );
+            problemDetail.setProperty("erros", errors);
+            return problemDetail;
+        } else {
+            String message = fieldErrors.isEmpty() ? "Erro de validação" : fieldErrors.get(0).getDefaultMessage();
+            return buildProblemDetail(
+                    new ErroValidacao(message)
+            );
+        }
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ProblemDetail handleIllegalException(IllegalArgumentException ex){
-        return buildProblemDetail(ex);
+    @ExceptionHandler({
+            Exception.class,
+            IllegalArgumentException.class,
+            DataIntegrityViolationException.class,
+            BadCredentialsException.class
+    })
+    public ProblemDetail handleException(Exception ex){
+        return buildProblemDetail(getErrorMapping(ex));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ProblemDetail handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
+        return buildProblemDetailConjunct(ex.getBindingResult());
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ProblemDetail handleBindException(BindException ex){
+        return buildProblemDetailConjunct(ex.getBindingResult());
     }
 
     @ExceptionHandler(EstadoInvalidoException.class)
@@ -167,24 +197,8 @@ public class GlobalExceptionHandler {
         return buildProblemDetail(ex);
     }
 
-
     @ExceptionHandler(NaoAutenticado.class)
     public ProblemDetail handleNaoAutenticado(NaoAutenticado ex){
-        return buildProblemDetail(ex);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ProblemDetail handleSpringValidacao(MethodArgumentNotValidException ex) {
-        return buildProblemDetail(ex);
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ProblemDetail handleSpringConflito(DataIntegrityViolationException ex) {
-        return buildProblemDetail(ex);
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ProblemDetail handleSpringNaoAutenticado(BadCredentialsException ex) {
         return buildProblemDetail(ex);
     }
 

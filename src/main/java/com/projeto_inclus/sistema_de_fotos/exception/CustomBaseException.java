@@ -12,6 +12,8 @@ public abstract class CustomBaseException extends RuntimeException implements IC
         super(message, cause);
     }
 
+    public CustomBaseException(){}
+
     @Override
     public abstract HttpStatus getHttpStatus();
 

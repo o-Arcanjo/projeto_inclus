@@ -14,4 +14,9 @@ public class NaoAutorizado extends CustomBaseException {
 
     @Override
     public ErrorTypeEnum getErrorType() { return ErrorTypeEnum.NAO_AUTORIZADO; }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }

@@ -14,4 +14,9 @@ public class Conflito extends CustomBaseException {
 
     @Override
     public ErrorTypeEnum getErrorType() { return ErrorTypeEnum.CONFLITO; }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getMessage();
+    }
 }
