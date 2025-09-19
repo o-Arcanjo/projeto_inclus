@@ -1,7 +1,8 @@
 package com.projeto_inclus.sistema_de_fotos.rest.dto;
 
 import com.projeto_inclus.sistema_de_fotos.entity.Usuario;
-import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.UsuarioResponseDTOCreate;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateUsuario;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.*;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.find.UsuarioResponseDTOFind;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,17 @@ public class DTOFactoryConfig {
     public DTOFactory dtoFactory() {
         DTOFactory factory = new DTOFactory();
 
+        factory.registerEntity(UsuarioRequestCreateUsuario.class, (UsuarioRequestCreateUsuario dto) -> {
+                    Usuario usuario = new Usuario();
+                    usuario.setNome(dto.nome());
+                    usuario.setEmail(dto.email());
+                    usuario.setSenha(dto.senha());
+                    usuario.setDataNascimento(dto.dataNascimento());
+                    return usuario;
+                });
+
         // Registro para DTO de criação
-        factory.register(UsuarioResponseDTOCreate.class, (Usuario usuario) ->
+        factory.registerDTO(UsuarioResponseDTOCreate.class, (Usuario usuario) ->
                 UsuarioResponseDTOCreate.builder()
                         .id(usuario.getId())
                         .nome(usuario.getNome())
@@ -26,7 +36,7 @@ public class DTOFactoryConfig {
         );
 
         // Registro para DTO de busca (detalhado)
-        factory.register(UsuarioResponseDTOFind.class, (Usuario usuario) ->
+        factory.registerDTO(UsuarioResponseDTOFind.class, (Usuario usuario) ->
                 UsuarioResponseDTOFind.builder()
                         .id(usuario.getId())
                         .nome(usuario.getNome())

@@ -1,4 +1,4 @@
-package com.projeto_inclus.sistema_de_fotos.rest.dto;
+package com.projeto_inclus.sistema_de_fotos.rest.dto.response.create;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

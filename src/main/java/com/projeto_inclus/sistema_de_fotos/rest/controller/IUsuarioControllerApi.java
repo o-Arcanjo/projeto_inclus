@@ -1,11 +1,14 @@
 package com.projeto_inclus.sistema_de_fotos.rest.controller;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateAtualizarUsuario;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateLogin;
-import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestDTO;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateUsuario;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.UsuarioResponseDTOAtualizar;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.UsuarioResponseDTOCreate;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.error.ErrorResponse500DTO;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.error.UsuarioErrorResponse400DTO;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.response.error.UsuarioErrorResponse409DTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 
 @Tag(
@@ -58,7 +63,7 @@ public interface IUsuarioControllerApi {
     )
     @PostMapping("/cadastrar")
     ResponseEntity<UsuarioResponseDTOCreate> cadastrarUsuario(
-            @RequestBody @Valid UsuarioRequestDTO usuarioRequest
+            @RequestBody @Valid UsuarioRequestCreateUsuario usuarioRequest
     );
 
 
@@ -72,4 +77,24 @@ public interface IUsuarioControllerApi {
             @RequestBody @Valid UsuarioRequestCreateLogin usuarioRequest
     );
 
+    @Operation(
+            summary = "Atualizar Usuário",
+            description = "Método para retornar usuário atualizado",
+            operationId = "atualizarUsuario"
+    )
+    @PutMapping("/{id}")
+    ResponseEntity<UsuarioResponseDTOAtualizar> atualizarUsuario(
+            @Parameter(
+                    description = "ID do usuário que será atualizado",
+                    required = true,
+                    example = "123e4567-e89b-12d3-a456-426614174000"
+            )
+            @PathVariable UUID uuid,
+
+            @Parameter(
+                    description = "Dados para atualizar o usuário",
+                    required = true
+            )
+            @RequestBody @Valid UsuarioRequestCreateAtualizarUsuario usuarioRequest
+            );
 }

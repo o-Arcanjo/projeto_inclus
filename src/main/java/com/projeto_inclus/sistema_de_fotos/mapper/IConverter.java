@@ -1,6 +1,6 @@
 package com.projeto_inclus.sistema_de_fotos.mapper;
 
-public interface IConverter<DTO,Entidade, DTORequest>{
+public interface IConverter<DTO,Entidade>{
     DTO converterEmDTO(Entidade entidade);
-    Entidade converterEmEntidade(DTORequest dto);
+    Entidade converterEmEntidade(DTO dto);
 }

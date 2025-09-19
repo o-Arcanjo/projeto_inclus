@@ -1,6 +1,4 @@
 package com.projeto_inclus.sistema_de_fotos.rest.dto.response.create;
-
-import com.projeto_inclus.sistema_de_fotos.rest.dto.IDTO;
 import lombok.Builder;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
@@ -32,5 +30,5 @@ public record UsuarioResponseDTOCreate(
 
         @NotNull
         LocalDateTime dataCriacao
-) implements IDTO {
+) {
 }

@@ -1,6 +1,5 @@
 package com.projeto_inclus.sistema_de_fotos.rest.dto.request;
 
-import com.projeto_inclus.sistema_de_fotos.rest.dto.IDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import java.time.LocalDate;
@@ -14,7 +13,7 @@ import jakarta.validation.constraints.*;
 
 
 @Builder
-public record UsuarioRequestDTO (
+public record UsuarioRequestCreateUsuario(
     @Schema(description = "Nome Completo do usuário", example = "João Silva")
     @NotBlank(message="Nome é obrigatório")
     @Size(max = 150, message = "Nome deve ter no máximo 150 caracteres")
@@ -38,7 +37,7 @@ public record UsuarioRequestDTO (
     @NotNull(message = "Data de nascimento é obrigatória")
     @Past(message = "Data de nascimento deve estar no passado")
     LocalDate dataNascimento
-) implements IDTO {}
+){}
 
 
 

@@ -1,8 +1,8 @@
 package com.projeto_inclus.sistema_de_fotos.rest.dto.response.find;
 
-import com.projeto_inclus.sistema_de_fotos.rest.dto.FotoResponseDTO;
-import com.projeto_inclus.sistema_de_fotos.rest.dto.InteracaoResponseDTO;
-import com.projeto_inclus.sistema_de_fotos.rest.dto.IDTO;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.FotoResponseDTO;
+import com.projeto_inclus.sistema_de_fotos.rest.dto.response.create.InteracaoResponseDTO;
+import io.micrometer.common.lang.Nullable;
 import lombok.Builder;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
@@ -36,8 +36,10 @@ public record UsuarioResponseDTOFind(
         @NotNull
         LocalDateTime dataCriacao,
 
+        @Nullable
         List<FotoResponseDTO> fotosArmazenadas,
 
+        @Nullable
         List<InteracaoResponseDTO> interacaoFotos
-) implements IDTO {
+)  {
 }

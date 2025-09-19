@@ -1,11 +1,14 @@
 package com.projeto_inclus.sistema_de_fotos.rest.dto.request;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
+import java.time.LocalDate;
+
+@Builder
 public record UsuarioRequestCreateLogin(
         @Schema(description = "Email do usuário", example = "joaosilva@gmail.com")
         @NotBlank(message="Email é obrigatório")
@@ -20,5 +23,5 @@ public record UsuarioRequestCreateLogin(
         )
         @Size(min = 8, max = 20, message="Senha deve ter entre 8 e 20 caracteres")
         String senha
-) {
+){
 }
