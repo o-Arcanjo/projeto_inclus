@@ -1,4 +1,5 @@
 package com.projeto_inclus.sistema_de_fotos.rest.controller;
+import com.projeto_inclus.sistema_de_fotos.entity.Usuario;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateAtualizarUsuario;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateLogin;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateUsuario;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,7 +84,7 @@ public interface IUsuarioControllerApi {
             description = "Método para retornar usuário atualizado",
             operationId = "atualizarUsuario"
     )
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     ResponseEntity<UsuarioResponseDTOAtualizar> atualizarUsuario(
             @Parameter(
                     description = "ID do usuário que será atualizado",
@@ -97,4 +99,43 @@ public interface IUsuarioControllerApi {
             )
             @RequestBody @Valid UsuarioRequestCreateAtualizarUsuario usuarioRequest
             );
+
+    @Operation(
+           summary = "Retornar lista com determinada quantidade da entidade de usuário",
+           description = "Método para retornar uma lista com usuários",
+           operationId = "retornarListaPaginada"
+    )
+    @GetMapping("/usuariosPaginados")
+    ResponseEntity<Page<UsuarioResponseDTOCreate>> findAll(@RequestParam int pagina, @RequestParam int itens);
+
+    @Operation(
+            summary = "Deletar usuário",
+            description = "Método para excluir um usuário pelo seu ID",
+            operationId = "deletarUsuario"
+    )
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deletarUsuario(
+            @Parameter (
+                    description = "ID do usuário que será deletado",
+                    required = true,
+                    example = "123e4567-e89b-12d3-a456-426614174000"
+            )
+            @PathVariable UUID id
+    );
+
+    @Operation(
+            summary = "Obter único usuário",
+            description = "Métódo para obter um único usuário pelo seu ID",
+            operationId = "obterUnicoUsuario"
+    )
+    @GetMapping("/{id}")
+    ResponseEntity<UsuarioResponseDTOCreate> obterUsuarioPorID(
+            @Parameter(
+                    description = "ID do usuário que será encontrado",
+                    required = true,
+                    example = "123e4567-e89b-12d3-a456-426614174000"
+            )
+            @PathVariable UUID id
+    );
+
 }

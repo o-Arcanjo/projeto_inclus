@@ -1,12 +1,10 @@
 package com.projeto_inclus.sistema_de_fotos.service;
-
 import com.projeto_inclus.sistema_de_fotos.domain.Identificador;
 import com.projeto_inclus.sistema_de_fotos.domain.IdentificadorFactory;
 import com.projeto_inclus.sistema_de_fotos.entity.Usuario;
 import com.projeto_inclus.sistema_de_fotos.exception.Conflito;
 import com.projeto_inclus.sistema_de_fotos.exception.NaoAutenticado;
 import com.projeto_inclus.sistema_de_fotos.exception.RecursoNaoEncontrado;
-import com.projeto_inclus.sistema_de_fotos.mapper.UsuarioMapper;
 import com.projeto_inclus.sistema_de_fotos.repository.IUsuarioRepository;
 import com.projeto_inclus.sistema_de_fotos.rest.controller.MapperFactory;
 import com.projeto_inclus.sistema_de_fotos.rest.dto.request.UsuarioRequestCreateAtualizarUsuario;
@@ -66,7 +64,7 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Override
     public UsuarioResponseDTOAtualizar atualizarUsuario(UUID id, UsuarioRequestCreateAtualizarUsuario request) {
         Usuario usuarioCadastrado = usuarioRepository.findUsuarioById(id)
-                .orElseThrow(() -> new RecursoNaoEncontrado(("Usuário não encontrado")));
+                .orElseThrow(() -> new RecursoNaoEncontrado("Usuário não encontrado"));
         Usuario usuarioRequest = MapperFactory.getMapper(UsuarioRequestCreateAtualizarUsuario.class).converterEmEntidade(request);
         usuarioCadastrado.setNome(usuarioRequest.getNome());
         usuarioCadastrado.setDataNascimento(usuarioRequest.getDataNascimento());
@@ -76,23 +74,31 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
     @Override
     public void deletarUsuario(UUID id) {
-
+        Usuario usuarioCadastrado = usuarioRepository.findUsuarioById(id)
+                .orElseThrow(() -> new RecursoNaoEncontrado("Usuário não encontrado"));
+        usuarioRepository.delete(usuarioCadastrado);
     }
 
     @Override
     public List<UsuarioResponseDTOCreate> listarTodosOsUsuarios() {
-        return List.of();
+        return usuarioRepository.findAll().stream()
+                .map(usuario -> MapperFactory.getMapper(UsuarioResponseDTOCreate.class)
+                        .converterEmDTO(usuario))
+                        .toList();
     }
 
 
     @Override
     public UsuarioResponseDTOCreate obterUsuarioPorId(UUID id) {
-        return null;
+        Usuario usuarioCadastrado = usuarioRepository.findUsuarioById(id)
+                .orElseThrow(() -> new RecursoNaoEncontrado("Usuario nao encontrado"));
+        return MapperFactory.getMapper(UsuarioResponseDTOCreate.class).converterEmDTO(usuarioCadastrado);
     }
 
 
     @Override
     public Page<UsuarioResponseDTOCreate> listarEntidadePaginada(Pageable pageable) {
-        return null;
+        return usuarioRepository.findAll(pageable)
+                .map(usuario -> MapperFactory.getMapper(UsuarioResponseDTOCreate.class).converterEmDTO(usuario));
     }
 }
